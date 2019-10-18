@@ -111,6 +111,18 @@ async def handleMessage(message, taskDefinition=None):
     taskId = message["payload"]["status"]["taskId"]
     asyncQueue = taskcluster.aio.Queue({"rootUrl": message["root_url"]}, session=session)
     task = (await asyncQueue.task(taskId)) if not taskDefinition else taskDefinition
+    # (mobile only) Ignore tasks associated to a branch different than master that are not part of a PR
+    # TODO: Verify that a PR w/o involving a fork works
+    try:
+        env = task["payload"]["env"]
+        if (
+            env["MOBILE_BASE_REPOSITORY"] == env["MOBILE_HEAD_REPOSITORY"] and
+            env["MOBILE_HEAD_REV"] != "refs/heads/master"):
+            logger.warning('For non-PR mobile tasks we only support the master branch.')
+            return jobs
+    except KeyError:
+        pass
+
     try:
         parsedRoute = parseRouteInfo("tc-treeherder", taskId, task["routes"], task)
     except PulseHandlerError as e:

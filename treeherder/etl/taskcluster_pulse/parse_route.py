@@ -32,6 +32,8 @@ def parseRoute(route):
       "revision": parsedRoute[3],
     }
 
+    # XXX: This logic is flawed since routes like the following will point to hg
+    # tc-treeherder.v2.android-components.d40f5a40d8b1dbf20cfe472522282c677a3190bb.0
     if owner and parsedProject:
         pushInfo["owner"] = owner
         pushInfo["origin"] = 'github.com'
