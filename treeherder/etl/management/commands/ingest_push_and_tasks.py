@@ -117,12 +117,37 @@ class Command(BaseCommand):
             nargs="?",
             help="taskId to ingest"
         )
+        parser.add_argument(
+            "--pr-url",
+            dest="prUrl",
+            help="Ingest a PR: e.g. https://github.com/mozilla-mobile/android-components/pull/4821"
+        )
 
     def handle(self, *args, **options):
         taskId = options["taskId"]
+        root_url = options["root_url"]
+        pr_url = options["prUrl"]
         if taskId:
-            root_url = options["root_url"]
             loop.run_until_complete(handleTaskId(taskId, root_url))
+        elif pr_url:
+            splitUrl = pr_url.split("/")
+            org = splitUrl[3]
+            repo = splitUrl[4]
+            pulse = {
+                "exchange": "exchange/taskcluster-github/v1/pull-request",
+                "routingKey": "primary.{}.{}.synchronize".format(org, repo),
+                "payload": {
+                    "repository": repo,
+                    "organization": org,
+                    "action": "synchronize",
+                    "details": {
+                        "event.pullNumber": splitUrl[6],
+                        "event.base.repo.url": "https://github.com/{}/{}.git".format(org, repo),
+                        "event.head.repo.url": "https://github.com/{}/{}.git".format(org, repo),
+                    },
+                }
+            }
+            PushLoader().process(pulse["payload"], pulse["exchange"], root_url)
         else:
             project = options["project"]
             changeset = options["changeset"]
