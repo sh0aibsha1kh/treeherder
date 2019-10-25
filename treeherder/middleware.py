@@ -19,6 +19,7 @@ CSP_DIRECTIVES = [
     "font-src 'self' https://fonts.gstatic.com",
     # The `data:` is required for images that were inlined by webpack's url-loader (as an optimisation).
     "img-src 'self' data:",
+    # TODO swap out taskcluster.net and taskcluster-dev.net urls with new rootUrls
     "connect-src 'self' https://*.taskcluster.net https://*.taskcluster-dev.net https://taskcluster-artifacts.net https://treestatus.mozilla-releng.net https://bugzilla.mozilla.org https://auth.mozilla.auth0.com",
     # Required since auth0-js performs session renewals in an iframe.
     "frame-src 'self' https://auth.mozilla.auth0.com",
