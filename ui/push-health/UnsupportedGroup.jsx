@@ -3,21 +3,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRedo } from '@fortawesome/free-solid-svg-icons';
 import {
   faPlusSquare,
   faMinusSquare,
 } from '@fortawesome/free-regular-svg-icons';
-import {
-  Row,
-  Collapse,
-  ButtonGroup,
-  ButtonDropdown,
-  Button,
-  DropdownMenu,
-  DropdownToggle,
-  DropdownItem,
-} from 'reactstrap';
+import { Row, Collapse } from 'reactstrap';
 import Markdown from 'react-markdown';
 
 import UnsupportedJob from './UnsupportedJob';

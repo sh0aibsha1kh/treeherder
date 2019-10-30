@@ -71,7 +71,11 @@ class UnsupportedJob extends PureComponent {
           rel="noopener noreferrer"
           title="file a bug for this failure"
         >
-          <FontAwesomeIcon icon={faBug} title="File bug" className="text-dark"/>
+          <FontAwesomeIcon
+            icon={faBug}
+            title="File bug"
+            className="text-dark"
+          />
         </a>
         {errorSummary && (
           <a href={errorSummary.url} target="_blank" rel="noopener noreferrer">
